@@ -1,13 +1,13 @@
 #!/usr/bin/python3
 
+import argparse
+import configparser
 import json
 import pprint as pp
 import re
 import requests
 import sys
 
-# simple python file containing webhook url in a 'url' variable
-import slack_webhook
 
 # list of regex object/alert msg tuples which will be used to identify alert conditions
 alert_re_list = []
@@ -20,6 +20,25 @@ alert_re_list.append((re.compile(r'vault.*root generation initialized'),'Root to
 alert_re_list.append((re.compile(r'vault.*root generation finished'),'Root token generation finished'))
 alert_re_list.append((re.compile(r'vault.*core: rekey initialized'),'Vault security barrier rekey process initialied'))
 alert_re_list.append((re.compile(r'vault.*core: security barrier rekeyed'),'Vault security barrier successfully rekeyed'))
+
+
+def options():
+    'Parse command line options with argparse.'
+
+    global args,config
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-d", dest="debug", action='store_true', help="print debug information")
+    parser.add_argument("-c", dest="configpath", help='config file path')
+    args = parser.parse_args()
+
+    # if not options.feedlistfile:
+    #     print("\nError: Must specify -l <feed list file>\n")
+    #     parser.print_help()
+    #     sys.exit(1)
+
+    config = configparser.ConfigParser()
+    config.read(args.configpath)
+
 
 def check(ln):
 
@@ -38,7 +57,7 @@ def alert_slack(msg):
     try:
         payload = '{"text":"%s"}' % msg
         headers = {'Content-type': 'application/json'}
-        r = requests.post(slack_webhook.url, headers=headers, data=payload)
+        r = requests.post(config['slack']['url'], headers=headers, data=payload)
     except Exception as e:
         print(e)
 
@@ -53,4 +72,5 @@ def read_stdin():
         ln = sys.stdin.readline().rstrip()
 
 if __name__ == '__main__':
+    options()
     read_stdin()
