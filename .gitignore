@@ -67,3 +67,5 @@ __pycache__
 
 .terraform.lock.hcl 
 tf.plan.out
+
+slack_webhook.py
