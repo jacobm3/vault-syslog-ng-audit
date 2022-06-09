@@ -38,6 +38,19 @@ resource "aws_instance" "syslog" {
     hostname = var.syslog_hostname
   })
 
+  provisioner "file" {
+    source      = "scripts/vault-audit-log-handler.py"
+    destination = "/usr/local/bin/vault-audit-log-handler.py"
+  }
+  provisioner "file" {
+    source      = "scripts/vault-server-log-handler.py"
+    destination = "/usr/local/bin/vault-server-log-handler.py"
+  }
+  provisioner "file" {
+    source      = "scripts/vault-log-handler.ini"
+    destination = "/usr/local/etc/vault-log-handler.ini"
+  }
+
 }
 
 resource "aws_security_group" "syslog" {
