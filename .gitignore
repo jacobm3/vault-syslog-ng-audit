@@ -69,3 +69,5 @@ __pycache__
 tf.plan.out
 
 slack_webhook.py
+
+*.out

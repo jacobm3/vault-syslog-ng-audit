@@ -20,7 +20,7 @@ alert_re_list.append((re.compile(r'vault.*root generation initialized'),'Root to
 alert_re_list.append((re.compile(r'vault.*root generation finished'),'Root token generation finished'))
 alert_re_list.append((re.compile(r'vault.*core: rekey initialized'),'Vault security barrier rekey process initialized'))
 alert_re_list.append((re.compile(r'vault.*core: security barrier rekeyed'),'Vault security barrier successfully rekeyed'))
-
+alert_re_list.append((re.compile(r'vault.*core: security barrier initialized'),'Vault security barrier initialized'))
 
 def options():
     'Parse command line options with argparse.'

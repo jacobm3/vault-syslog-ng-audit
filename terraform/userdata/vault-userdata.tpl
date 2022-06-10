@@ -113,17 +113,17 @@ systemctl restart syslog-ng
 # start vault
 systemctl enable vault
 systemctl start vault
+sleep 1
 
-tee /etc/profile.d/vault.sh <<EOF
+cat > /etc/profile.d/vault.sh <<EOF
 export VAULT_ADDR=https://localhost:8200/
 export VAULT_SKIP_VERIFY=1
 EOF
 . /etc/profile.d/vault.sh
 
-sleep 1
 
-# DANGER: simple init/unseal for syslog-ng demo purposes.
-# Use cloud auto unseal or shamir for production.
+# DANGER: simple init/unseal for demo purposes.
+# Use cloud auto unseal or shamir+gpg for production.
 # https://learn.hashicorp.com/tutorials/vault/pattern-unseal?in=vault/recommended-patterns
 vault operator init -format=json -t 1 -n 1 > /etc/vault.d/.init.json
 vault operator unseal $(jq -r .unseal_keys_b64[0] < /etc/vault.d/.init.json)
@@ -131,14 +131,18 @@ vault login -no-print $(jq -r .root_token < /etc/vault.d/.init.json)
 vault audit enable socket address=localhost:1515 socket_type=tcp hmac_accessor=false
 
 
-cat >> /home/ubuntu/.bashrc <<EOF
-echo 
-echo # NOT FOR PRODUCTION USE
-echo # 
-echo # https://learn.hashicorp.com/tutorials/vault/pattern-unseal?in=vault/recommended-patterns
-echo #
-echo vault operator unseal \$(jq -r .unseal_keys_b64[0] < /etc/vault.d/.init.json)
-echo vault login \$(jq -r .root_token < /etc/vault.d/.init.json)
+cat >> /home/ubuntu/.bashrc <<'EOF'
+echo
+echo '#'
+echo '# NOT FOR PRODUCTION USE'
+echo '#' 
+echo '# https://learn.hashicorp.com/tutorials/vault/pattern-unseal?in=vault/recommended-patterns'
+echo '#'
+echo '#'
+echo '# Unseal:'
+echo 'vault operator unseal $(jq -r .unseal_keys_b64[0] < /etc/vault.d/.init.json)'
+echo '# Login:'
+echo 'vault login $(jq -r .root_token < /etc/vault.d/.init.json)'
 echo 
 EOF
 

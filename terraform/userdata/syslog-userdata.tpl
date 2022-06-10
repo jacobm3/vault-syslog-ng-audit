@@ -46,7 +46,6 @@ git clone https://github.com/jacobm3/vault-syslog-ng-audit.git
 cp vault-syslog-ng-audit/terraform/scripts/*.py /usr/local/bin
 chmod +x /usr/local/bin/*.py
 
-
 cat > /usr/local/etc/vault-log-handler.ini <<EOF
 [slack]
 url = ${slack_notif_url}
@@ -55,12 +54,11 @@ EOF
 
 
 cp vault-syslog-ng-audit/terraform/scripts/syslog-server.vault.conf /etc/syslog-ng/conf.d/vault.conf
-mkdir -p /var/log/vault
+mkdir -p /var/log/vault/archive
 systemctl restart syslog-ng
 
 cd /etc/logrotate.d
-tee /etc/logrotate.d/vault-syslog-ng <<EOF
-delaycompress
+cat > /etc/logrotate.d/vault-syslog-ng <<EOF
 compress
 compresscmd /usr/bin/zstd
 compressext .zst
@@ -69,13 +67,16 @@ uncompresscmd /usr/bin/unzstd
 /var/log/vault/audit
 /var/log/vault/messages
 {
-        rotate 93
-        daily
+        rotate 2300
+        hourly
         missingok
-        notifempty
+        olddir /var/log/vault/archive
         postrotate
                 invoke-rc.d syslog-ng reload > /dev/null
         endscript
 }
 EOF
 
+cat > /etc/cron.d/logrotate-vault <<EOF
+0 * * * * root /usr/sbin/logrotate /etc/logrotate.d/vault-syslog-ng
+EOF
