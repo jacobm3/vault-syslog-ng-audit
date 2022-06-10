@@ -36,20 +36,8 @@ resource "aws_instance" "syslog" {
 
   user_data = templatefile("userdata/syslog-userdata.tpl", {
     hostname = var.syslog_hostname
+    slack_notif_url = var.slack_notif_url
   })
-
-  provisioner "file" {
-    source      = "scripts/vault-audit-log-handler.py"
-    destination = "/usr/local/bin/vault-audit-log-handler.py"
-  }
-  provisioner "file" {
-    source      = "scripts/vault-server-log-handler.py"
-    destination = "/usr/local/bin/vault-server-log-handler.py"
-  }
-  provisioner "file" {
-    source      = "scripts/vault-log-handler.ini"
-    destination = "/usr/local/etc/vault-log-handler.ini"
-  }
 
 }
 

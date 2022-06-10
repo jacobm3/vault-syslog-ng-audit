@@ -131,7 +131,7 @@ vault login -no-print $(jq -r .root_token < /etc/vault.d/.init.json)
 vault audit enable socket address=localhost:1515 socket_type=tcp hmac_accessor=false
 
 
-cat >> /etc/update-motd.d/60-vault-login <<EOF
+cat >> /home/ubuntu/.bashrc <<EOF
 echo 
 echo # NOT FOR PRODUCTION USE
 echo # 
