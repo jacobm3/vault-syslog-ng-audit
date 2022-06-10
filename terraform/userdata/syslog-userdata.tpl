@@ -69,6 +69,7 @@ uncompresscmd /usr/bin/unzstd
 {
         rotate 2300
         hourly
+        dateext
         missingok
         olddir /var/log/vault/archive
         postrotate

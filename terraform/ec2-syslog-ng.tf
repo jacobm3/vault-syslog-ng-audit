@@ -21,7 +21,7 @@ resource "aws_instance" "syslog" {
   }
 
   user_data = templatefile("userdata/syslog-userdata.tpl", {
-    hostname = var.syslog_hostname
+    hostname        = var.syslog_hostname
     slack_notif_url = var.slack_notif_url
   })
 
@@ -29,7 +29,7 @@ resource "aws_instance" "syslog" {
 
 resource "aws_security_group" "syslog" {
   name        = var.syslog_hostname
-  description = "Allow vault inbound traffic"
+  description = "Allow inbound traffic"
   vpc_id      = var.vpc_id
 
   ingress {

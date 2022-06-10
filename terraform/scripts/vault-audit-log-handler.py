@@ -82,6 +82,8 @@ def check(j,ln):
 
 def alert_slack(j,ln,alert_msgs):
     if args.debug: print('alert_slack():',alert_msgs)
+    with open('/var/log/vault/audit.alert', "a") as f:
+        f.write('{"text":"ALERT: %s, request_id: %s "}' % (alert_msgs,j['request']['id']))
     try:
         payload = '{"text":"ALERT: %s, request_id: %s "}' % (alert_msgs,j['request']['id'])
         headers = {'Content-type': 'application/json'}

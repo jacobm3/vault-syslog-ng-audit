@@ -53,7 +53,8 @@ def check(ln):
         alert_slack('ALERT: %s %s' % (alert_msgs,ln))
 
 def alert_slack(msg):
-
+    with open('/var/log/vault/messages.alert', "a") as f:
+        f.write(msg)
     try:
         payload = '{"text":"%s"}' % msg
         headers = {'Content-type': 'application/json'}

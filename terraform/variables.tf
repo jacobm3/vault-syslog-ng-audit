@@ -12,5 +12,8 @@ variable "syslog_instance_type" { type = string }
 #
 # export TF_VAR_slack_notif_url=https://hooks.slack.com/services/T01xxxxxxx/B03Kyyyy/fgxDIzzzzzz
 #
-variable "slack_notif_url" { type = string }
+variable "slack_notif_url" {
+  type    = string
+  default = "http://asdf.com/"
+}
 
