@@ -70,7 +70,9 @@ source s_vault_tcp {
          network(
            flags(no-parse)
            log-msg-size(268435456)
-           transport(tcp) port(1515));
+           ip(127.0.0.1)
+           transport(tcp) 
+           fport(1515));
        };
 
 # Vault server logs
