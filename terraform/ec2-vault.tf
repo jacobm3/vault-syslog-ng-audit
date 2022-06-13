@@ -13,7 +13,7 @@ resource "aws_instance" "vault" {
   }
 
   tags = {
-    Name = var.vault_hostname
+    Name = ${var.vault_hostname}-${random_string.random}
   }
 
   user_data = templatefile("userdata/vault-userdata.tpl", {
