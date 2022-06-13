@@ -1,3 +1,7 @@
+locals {
+  syslog_name = "${var.syslog_hostname}-${random_string.random.result}"
+}
+
 resource "aws_instance" "syslog" {
   ami = data.aws_ami.latest-ubuntu.id
 
@@ -17,7 +21,7 @@ resource "aws_instance" "syslog" {
   }
 
   tags = {
-    Name = var.syslog_hostname
+    Name = local.syslog_name
   }
 
   user_data = templatefile("userdata/syslog-userdata.tpl", {
@@ -28,7 +32,7 @@ resource "aws_instance" "syslog" {
 }
 
 resource "aws_security_group" "syslog" {
-  name        = var.syslog_hostname
+  name        = local.syslog_name
   description = "Allow inbound traffic"
   vpc_id      = var.vpc_id
 

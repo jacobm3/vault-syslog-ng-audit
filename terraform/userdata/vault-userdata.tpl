@@ -72,7 +72,7 @@ source s_vault_tcp {
            log-msg-size(268435456)
            ip(127.0.0.1)
            transport(tcp) 
-           fport(1515));
+           port(1515));
        };
 
 # Vault server logs

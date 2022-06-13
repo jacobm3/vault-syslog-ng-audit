@@ -1,4 +1,6 @@
-
+locals {
+  vault_name = "${var.vault_hostname}-${random_string.random.result}"
+}
 
 resource "aws_instance" "vault" {
   ami = data.aws_ami.latest-ubuntu.id
@@ -13,7 +15,7 @@ resource "aws_instance" "vault" {
   }
 
   tags = {
-    Name = ${var.vault_hostname}-${random_string.random}
+    Name = local.vault_name
   }
 
   user_data = templatefile("userdata/vault-userdata.tpl", {
@@ -26,7 +28,7 @@ resource "aws_instance" "vault" {
 }
 
 resource "aws_security_group" "vault" {
-  name        = var.vault_hostname
+  name        = local.vault_name
   description = "Allow vault inbound traffic"
   vpc_id      = var.vpc_id
 
@@ -65,6 +67,6 @@ resource "aws_security_group" "vault" {
   }
 
   tags = {
-    Name = var.vault_hostname
+    Name = local.vault_name
   }
 }
