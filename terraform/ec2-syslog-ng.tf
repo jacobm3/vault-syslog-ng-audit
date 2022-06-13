@@ -69,6 +69,6 @@ resource "aws_security_group" "syslog" {
   }
 
   tags = {
-    Name = var.syslog_hostname
+    Name = local.syslog_name
   }
 }
