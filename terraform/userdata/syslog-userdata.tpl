@@ -65,7 +65,9 @@ compressext .zst
 uncompresscmd /usr/bin/unzstd
 
 /var/log/vault/audit
+/var/log/vault/audit.alert
 /var/log/vault/messages
+/var/log/vault/messages.alert
 {
         rotate 2300
         hourly
