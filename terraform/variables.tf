@@ -1,5 +1,5 @@
 variable "vpc_id" { type = string }
-variable "key_name" { type = string }
+variable "ec2_key_pair" { type = string }
 
 variable "vault_hostname" { type = string }
 variable "vault_instance_type" { type = string }
