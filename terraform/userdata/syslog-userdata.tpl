@@ -70,17 +70,20 @@ uncompresscmd /usr/bin/unzstd
 /var/log/vault/messages
 /var/log/vault/messages.alert
 {
-        rotate 2300
+        rotate 3000
         hourly
+        maxsize 1G
         dateext
+        dateformat -%Y%m%d_%H:%M:%S
         missingok
         olddir /var/log/vault/archive
         postrotate
                 invoke-rc.d syslog-ng reload > /dev/null
         endscript
 }
+
 EOF
 
 cat > /etc/cron.d/logrotate-vault <<EOF
-0 * * * * root /usr/sbin/logrotate /etc/logrotate.d/vault-syslog-ng
+* * * * * root /usr/sbin/logrotate /etc/logrotate.d/vault-syslog-ng
 EOF
