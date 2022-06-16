@@ -66,6 +66,9 @@ def check(j,ln):
     if path.startswith('sys/generate-root'):
             alert_msgs.append('Root token generation path accessed: %s' % path)
 
+    if path.startswith('sys/policies') and j['request']['operation'] == 'update':
+            alert_msgs.append('Policy written: %s' % path)
+
     if path.startswith('secret/data/emergency-only'):
             alert_msgs.append('sensitive path accessed: %s' % path)
 
