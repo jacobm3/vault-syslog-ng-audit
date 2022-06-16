@@ -1,4 +1,4 @@
-vpc_id   = "vpc-4f778c2a"
+vpc_id       = "vpc-4f778c2a"
 ec2_key_pair = "acer-wsl"
 
 vault_hostname      = "vault"
