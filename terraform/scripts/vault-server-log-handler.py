@@ -11,16 +11,35 @@ import sys
 
 # list of regex object/alert msg tuples which will be used to identify alert conditions
 alert_re_list = []
-alert_re_list.append((re.compile(r'vault.*root token generated'),'Root token generated'))
-alert_re_list.append((re.compile(r'vault.*enabled credential backend'),'Auth method enabled'))
-alert_re_list.append((re.compile(r'vault.*vault is sealed'),'Vault sealed'))
-alert_re_list.append((re.compile(r'vault.*vault is unsealed'),'Vault unsealed'))
-alert_re_list.append((re.compile(r'vault.*Vault shutdown triggered'),'Vault shutdown'))
-alert_re_list.append((re.compile(r'vault.*root generation initialized'),'Root token generation initiated'))
-alert_re_list.append((re.compile(r'vault.*root generation finished'),'Root token generation finished'))
-alert_re_list.append((re.compile(r'vault.*core: rekey initialized'),'Vault security barrier rekey process initialized'))
-alert_re_list.append((re.compile(r'vault.*core: security barrier rekeyed'),'Vault security barrier successfully rekeyed'))
-alert_re_list.append((re.compile(r'vault.*core: security barrier initialized'),'Vault security barrier initialized'))
+alert_re_list.append((re.compile(r'vault.*root token generated'),
+                                'Root token generated'))
+
+alert_re_list.append((re.compile(r'vault.*enabled credential backend'),
+                                'Auth method enabled'))
+
+alert_re_list.append((re.compile(r'vault.*vault is sealed'),
+                                'Vault sealed'))
+
+alert_re_list.append((re.compile(r'vault.*vault is unsealed'),
+                                'Vault unsealed'))
+
+alert_re_list.append((re.compile(r'vault.*Vault shutdown triggered'),
+                                'Vault shutdown'))
+
+alert_re_list.append((re.compile(r'vault.*root generation initialized'),
+                                'Root token generation initiated'))
+
+alert_re_list.append((re.compile(r'vault.*root generation finished'),
+                                'Root token generation finished'))
+
+alert_re_list.append((re.compile(r'vault.*core: rekey initialized'),
+                                'Vault security barrier rekey process initialized'))
+
+alert_re_list.append((re.compile(r'vault.*core: security barrier rekeyed'),
+                                'Vault security barrier successfully rekeyed'))
+
+alert_re_list.append((re.compile(r'vault.*core: security barrier initialized'),
+                                'Vault security barrier initialized'))
 
 def options():
     'Parse command line options with argparse.'

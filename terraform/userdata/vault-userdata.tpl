@@ -39,6 +39,7 @@ git clone https://github.com/jacobm3/gbin.git
 chmod +x gbin/*
 
 echo '. ~/gbin/jacobrc'  >> .bashrc
+echo 'set -o emacs' >> .bashrc
 ln -s gbin/jacobrc .jacobrc
 
 sudo chown -R ubuntu:ubuntu /home/ubuntu
