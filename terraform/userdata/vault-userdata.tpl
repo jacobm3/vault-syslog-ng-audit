@@ -55,6 +55,8 @@ touch /var/log/syslog-ng/messages /var/log/syslog-ng/audit
 chmod 644 /var/log/syslog-ng/messages /var/log/syslog-ng/audit
 
 tee /etc/syslog-ng/conf.d/vault.conf <<EOF
+
+# Don't add stats or markers
 options {
   time-reap(30);
   stats_freq(0);
@@ -62,10 +64,13 @@ options {
 };
 
 # Vault audit logs
+# Don't add hostname/syslog timestamps. Preserve raw JSON messages.
 template t_imp {
   template("\$MSG\n");
   template_escape(no);
 };
+
+# Raw TCP input listening only on loopback interface
 source s_vault_tcp {
          network(
            flags(no-parse)
@@ -75,23 +80,27 @@ source s_vault_tcp {
            port(1515));
        };
 
-# Vault server logs
+# Vault server daemon logs
 source s_file_daemon {
     file("/var/log/daemon.log");
 };
 
+# Send audit logs to log server on TCP/1515
+# 4GB disk buffer, only used when log server is down
 destination d_remote_audit {
     tcp("${syslog_ip}"
         port(1515)
         template(t_imp)
         disk-buffer(
             mem-buf-length(10000)
-            disk-buf-size(1000000000)
+            disk-buf-size(4000000000)
             truncate-size-ratio(0.1)
         )
     );
 };
 
+# Send daemon logs to log server on TCP/1514
+# 1GB disk buffer
 destination d_remote_daemon {
     network("${syslog_ip}"
         port(1514)

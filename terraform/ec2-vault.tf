@@ -6,7 +6,7 @@ resource "aws_instance" "vault" {
   ami = data.aws_ami.latest-ubuntu.id
 
   instance_type = var.vault_instance_type
-  key_name      = var.key_name
+  key_name      = var.ec2_key_pair
 
   security_groups = [aws_security_group.vault.name]
 
@@ -23,7 +23,7 @@ resource "aws_instance" "vault" {
     syslog_ip = aws_instance.syslog.private_ip
   })
 
-  depends_on = [aws_instance.syslog]
+  depends_on = [aws_instance.syslog, random_string.random]
 
 }
 
@@ -69,4 +69,5 @@ resource "aws_security_group" "vault" {
   tags = {
     Name = local.vault_name
   }
+  depends_on = [random_string.random]
 }

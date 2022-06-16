@@ -6,7 +6,7 @@ resource "aws_instance" "syslog" {
   ami = data.aws_ami.latest-ubuntu.id
 
   instance_type = var.syslog_instance_type
-  key_name      = var.key_name
+  key_name      = var.ec2_key_pair
 
   security_groups = [aws_security_group.syslog.name]
 
@@ -28,6 +28,8 @@ resource "aws_instance" "syslog" {
     hostname        = var.syslog_hostname
     slack_notif_url = var.slack_notif_url
   })
+
+  depends_on = [random_string.random]
 
 }
 
@@ -71,4 +73,5 @@ resource "aws_security_group" "syslog" {
   tags = {
     Name = local.syslog_name
   }
+  depends_on = [random_string.random]
 }
