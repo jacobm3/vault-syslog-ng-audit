@@ -9,11 +9,12 @@ import sys
 import time
 
 # COL1 = alert title
-# COL2 = regex pattern
+# COL2 = regex pattern to alert on
+# COL3 = regex pattern to exclude from alerts (or False if no exclusion needed)
 re_pattern_list = [
-('kernel booting',r'kernel: Booting Linux'),
-('Fail',r'fail'),
-('Error',r'error'),
+('kernel booting', r'kernel: Booting Linux', False),
+('Fail', r'fail', r'plugin'),
+('Error', r'error', False),
 ]
 
 def options():
@@ -42,19 +43,33 @@ def load_re_list():
     # [ ['TITLE', regex_obj] ]
     re_obj_list = []
     for row in re_pattern_list:
-        re_obj_list.append( [ row[0], re.compile(row[1],re.I) ] )
+        exclude_re = False
+        if row[2]:
+            exclude_re = re.compile(row[2],re.I)
+        re_obj_list.append( [ row[0], re.compile(row[1],re.I), exclude_re ] )
+
+    #print(re_obj_list)
 
 def check(ln):
     for row in re_obj_list:
         m = row[1].search(ln)
         if m:
-            alert(row[0],ln)
+
+            # alert if an exclude_re is present and it fails to match
+            if row[2]:
+                m2 = row[2].search(ln)
+                if not m2:
+                    alert(row[0],ln)
+
+            # also alert if row[1] matched and no exclude_re is defined
+            else:
+                alert(row[0],ln)
 
 def alert(title,ln):
     msg = 'IGNORE TEST ALERT: %s, MSG: %s' % (title,ln)
     print(msg)
-    alert_slack(msg)
-    alert_webex(msg)
+    #alert_slack(msg)
+    #alert_webex(msg)
 
 def alert_slack(msg):
     try:
