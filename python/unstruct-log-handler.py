@@ -51,15 +51,24 @@ def check(ln):
             alert(row[0],ln)
 
 def alert(title,ln):
-    msg = 'ALERT: %s, MSG: %s' % (title,ln)
+    msg = 'IGNORE TEST ALERT: %s, MSG: %s' % (title,ln)
     print(msg)
     alert_slack(msg)
+    alert_webex(msg)
 
 def alert_slack(msg):
     try:
         payload = '{"text":"%s"}' % msg
         headers = {'Content-type': 'application/json'}
         r = requests.post(config['slack']['url'], headers=headers, data=payload)
+    except Exception as e:
+        print(e)
+
+def alert_webex(msg):
+    try:
+        payload = '{"markdown":"%s"}' % msg
+        headers = {'Content-type': 'application/json'}
+        r = requests.post(config['webex']['url'], headers=headers, data=payload)
     except Exception as e:
         print(e)
 
