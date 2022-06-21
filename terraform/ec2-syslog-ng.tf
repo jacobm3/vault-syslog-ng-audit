@@ -13,7 +13,7 @@ resource "aws_instance" "syslog" {
   root_block_device {
     # size in GiB. Set high if you plan to perform Vault benchmark tests which 
     # can fill a disk quickly
-    volume_size = 20
+    volume_size = 40
   }
 
   lifecycle {
